@@ -18,5 +18,6 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Build and verify (tests + checkstyle)
+      - name: Build and verify (hw05)
         run: mvn -B verify
+        working-directory: hw05
