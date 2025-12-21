@@ -15,7 +15,11 @@ import ru.otus.hw.models.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.ArrayList;
 
 @Repository
 @RequiredArgsConstructor
@@ -92,7 +96,9 @@ public class JdbcBookRepository implements BookRepository {
 
     private void mergeBooksInfo(List<Book> booksWithoutGenres, List<Genre> genres,
                                 List<BookGenreRelation> relations) {
-        if (booksWithoutGenres.isEmpty() || genres.isEmpty() || relations.isEmpty()) {return;}
+        if (booksWithoutGenres.isEmpty() || genres.isEmpty() || relations.isEmpty()) {
+            return;
+        }
         Map<Long, Book> bookById = new HashMap<>();
         for (Book b : booksWithoutGenres) {
             bookById.put(b.getId(), b);
@@ -112,7 +118,7 @@ public class JdbcBookRepository implements BookRepository {
 
     private Book insert(Book book) {
         var keyHolder = new GeneratedKeyHolder();
-        String sql ="insert into books(title, author_id) values (:title, :authorId)";
+        String sql = "insert into books(title, author_id) values (:title, :authorId)";
         var params = new MapSqlParameterSource()
                 .addValue("title", book.getTitle())
                 .addValue("authorId", book.getAuthor().getId());
