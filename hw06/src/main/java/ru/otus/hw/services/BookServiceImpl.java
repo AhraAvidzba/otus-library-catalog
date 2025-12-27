@@ -27,7 +27,9 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Book> findById(long id) {
-        return bookRepository.findById(id);
+        var book = bookRepository.findById(id);
+        book.ifPresent(b -> b.getGenres().size());
+        return book;
     }
 
     @Override
