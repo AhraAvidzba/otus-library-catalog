@@ -16,6 +16,9 @@ public class JpaBookRepository implements BookRepository {
 
     private final EntityManager em;
 
+/*  TODO
+    подумать над тем как не делать тяжелую загрузку всех жанров когда например подтягиваются книга
+    для комментария в dto которого вообще не нужны жанры а только id и title книги */
     @Override
     public Optional<Book> findById(long id) {
         EntityGraph<?> eg = em.getEntityGraph("book-with-author");
