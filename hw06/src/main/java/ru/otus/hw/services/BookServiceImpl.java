@@ -3,8 +3,10 @@ package ru.otus.hw.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.dto.BookDto;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
+import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
@@ -26,29 +28,31 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Book> findById(long id) {
+    public Optional<BookDto> findById(long id) {
         var book = bookRepository.findById(id);
         book.ifPresent(b -> b.getGenres().size());
-        return book;
+        return book.map(this::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> findAll() {
+    public List<BookDto> findAll() {
         var books = bookRepository.findAll();
         books.forEach(b -> b.getGenres().size());
-        return books;
+        return books.stream()
+                .map(this::toDto)
+                .toList();
     }
 
     @Override
     @Transactional
-    public Book insert(String title, long authorId, Set<Long> genresIds) {
+    public BookDto insert(String title, long authorId, Set<Long> genresIds) {
         return save(0, title, authorId, genresIds);
     }
 
     @Override
     @Transactional
-    public Book update(long id, String title, long authorId, Set<Long> genresIds) {
+    public BookDto update(long id, String title, long authorId, Set<Long> genresIds) {
         return save(id, title, authorId, genresIds);
     }
 
@@ -58,7 +62,7 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    private Book save(long id, String title, long authorId, Set<Long> genresIds) {
+    private BookDto save(long id, String title, long authorId, Set<Long> genresIds) {
         if (isEmpty(genresIds)) {
             throw new IllegalArgumentException("Genres ids must not be null");
         }
@@ -71,6 +75,20 @@ public class BookServiceImpl implements BookService {
         }
 
         var book = new Book(id, title, author, genres);
-        return bookRepository.save(book);
+        var saved = bookRepository.save(book);
+        return toDto(saved);
+    }
+
+
+    private BookDto toDto(Book b) {
+        return new BookDto(
+                b.getId(),
+                b.getTitle(),
+                b.getAuthor().getId(),
+                b.getAuthor().getFullName(),
+                b.getGenres().stream()
+                        .map(Genre::getName)
+                        .toList()
+        );
     }
 }

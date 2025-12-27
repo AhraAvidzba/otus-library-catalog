@@ -18,20 +18,24 @@ public class JpaBookRepository implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        EntityGraph<?> eg = em.getEntityGraph("book.author.genres.graph");
-        var query = em.createQuery("select b from Book b where id = :id", Book.class);
+        EntityGraph<?> eg = em.getEntityGraph("book-with-author");
+        var query = em.createQuery("select b from Book b where b.id = :id", Book.class);
         query.setParameter("id", id);
         query.setHint("jakarta.persistence.fetchgraph", eg);
-        return query.getResultList().stream().findFirst();
+        Optional<Book> book = query.getResultList().stream().findFirst();
+        book.ifPresent(b -> fetchGenresForBooks(List.of(b)));
+        return book;
     }
 
 
     @Override
     public List<Book> findAll() {
-        EntityGraph<?> eg = em.getEntityGraph("book.author.genres.graph");
+        EntityGraph<?> eg = em.getEntityGraph("book-with-author");
         var query = em.createQuery("select b from Book b", Book.class);
         query.setHint("jakarta.persistence.fetchgraph", eg);
-        return query.getResultList();
+        List<Book> books = query.getResultList();
+        fetchGenresForBooks(books); // private helper
+        return books;
     }
 
     @Override
@@ -50,5 +54,23 @@ public class JpaBookRepository implements BookRepository {
             throw new EntityNotFoundException("Book with id %d not found".formatted(id));
         }
         em.remove(book);
+    }
+
+    private void fetchGenresForBooks(List<Book> books) {
+        if (books == null || books.isEmpty()) {
+            return;
+        }
+
+        List<Long> ids = books.stream()
+                .map(Book::getId)
+                .toList();
+
+        em.createQuery(
+                        "select distinct b from Book b " +
+                                "left join fetch b.genres g " +
+                                "where b.id in :ids", Book.class
+                )
+                .setParameter("ids", ids)
+                .getResultList();
     }
 }
