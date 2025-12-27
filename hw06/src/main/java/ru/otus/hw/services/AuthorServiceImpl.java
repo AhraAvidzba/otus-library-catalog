@@ -18,4 +18,8 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
+
+    public static class CommentServiceImpl extends BookService.CommentService {
+
+    }
 }
