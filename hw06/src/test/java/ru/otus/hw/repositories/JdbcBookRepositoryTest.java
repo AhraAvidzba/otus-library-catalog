@@ -35,7 +35,7 @@ class JdbcBookRepositoryTest {
     void setUp() {
         dbAuthors = getDbAuthors();
         dbGenres = getDbGenres();
-        dbBooks = getDbBooks(dbAuthors, dbGenres);
+        dbBooks = buildDbBooks(dbAuthors, dbGenres);
     }
 
     @DisplayName("должен загружать книгу по id")
@@ -116,7 +116,7 @@ class JdbcBookRepositoryTest {
                 .toList();
     }
 
-    private static List<Book> getDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
+    private static List<Book> buildDbBooks(List<Author> dbAuthors, List<Genre> dbGenres) {
         return IntStream.range(1, 4).boxed()
                 .map(id -> new Book(id,
                         "BookTitle_" + id,
@@ -129,6 +129,6 @@ class JdbcBookRepositoryTest {
     private static List<Book> getDbBooks() {
         var dbAuthors = getDbAuthors();
         var dbGenres = getDbGenres();
-        return getDbBooks(dbAuthors, dbGenres);
+        return buildDbBooks(dbAuthors, dbGenres);
     }
 }
