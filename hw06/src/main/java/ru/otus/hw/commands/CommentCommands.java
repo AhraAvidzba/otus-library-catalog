@@ -29,4 +29,23 @@ public class CommentCommands {
                 .map(commentConverter::commentToString)
                 .orElse("Comment with id %d not found".formatted(id));
     }
+
+    @ShellMethod(value = "Insert comment", key = "insCom")
+    public String insertComment(String text, long bookId) {
+        var savedComment = commentService.insert(text, bookId);
+        return commentConverter.commentToString(savedComment);
+    }
+
+    // bupd 4 editedBook 3 2,5
+    @ShellMethod(value = "Update comment", key = "updCom")
+    public String updateComment(long id, String text, long BookId) {
+        var savedComment = commentService.update(id, text, BookId);
+        return commentConverter.commentToString(savedComment);
+    }
+
+    // bdel 4
+    @ShellMethod(value = "Delete comment by id", key = "delCom")
+    public void deleteBook(long id) {
+        commentService.deleteById(id);
+    }
 }

@@ -10,4 +10,10 @@ public interface CommentService {
     Optional<CommentDto> findById(long id);
 
     List<CommentDto> findByBookId(long bookId);
+
+    CommentDto insert(String text, long bookId);
+
+    CommentDto update(long id, String text, long bookId);
+
+    void deleteById(long id);
 }
