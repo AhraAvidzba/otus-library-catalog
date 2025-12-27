@@ -19,11 +19,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий на основе Jdbc для работы с книгами ")
 @JdbcTest
-@Import({JdbcBookRepository.class, JdbcGenreRepository.class})
+@Import({JpaBookRepository.class, JpaGenreRepository.class})
 class JdbcBookRepositoryTest {
 
     @Autowired
-    private JdbcBookRepository repositoryJdbc;
+    private JpaBookRepository repositoryJdbc;
 
     private List<Author> dbAuthors;
 

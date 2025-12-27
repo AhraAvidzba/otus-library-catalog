@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -16,8 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "books")
 @NamedEntityGraph(name = "book.author.genres.graph",
-        attributeNodes = {@NamedAttributeNode("author"),
-                @NamedAttributeNode("genres")})
+        attributeNodes = {@NamedAttributeNode("author")})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,8 @@ public class Book {
     @JoinColumn(name="author_id", nullable = false)
     private Author author;
 
-    @Fetch(FetchMode.SUBSELECT)
+    @Fetch(FetchMode.SELECT)
+    @BatchSize(size = 50)
     @ManyToMany(fetch=FetchType.LAZY)
     @JoinTable(
             name="books_genres",
