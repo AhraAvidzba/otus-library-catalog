@@ -16,18 +16,13 @@ public class JpaBookRepository implements BookRepository {
 
     private final EntityManager em;
 
-/*  TODO
-    подумать над тем как не делать тяжелую загрузку всех жанров когда например подтягиваются книга
-    для комментария в dto которого вообще не нужны жанры а только id и title книги */
     @Override
     public Optional<Book> findById(long id) {
         EntityGraph<?> eg = em.getEntityGraph("book-with-author");
         var query = em.createQuery("select b from Book b where b.id = :id", Book.class);
         query.setParameter("id", id);
         query.setHint("jakarta.persistence.fetchgraph", eg);
-        Optional<Book> book = query.getResultList().stream().findFirst();
-        book.ifPresent(b -> fetchGenresForBooks(List.of(b)));
-        return book;
+        return query.getResultList().stream().findFirst();
     }
 
 
@@ -36,9 +31,7 @@ public class JpaBookRepository implements BookRepository {
         EntityGraph<?> eg = em.getEntityGraph("book-with-author");
         var query = em.createQuery("select b from Book b", Book.class);
         query.setHint("jakarta.persistence.fetchgraph", eg);
-        List<Book> books = query.getResultList();
-        fetchGenresForBooks(books); // private helper
-        return books;
+        return query.getResultList();
     }
 
     @Override
@@ -59,21 +52,4 @@ public class JpaBookRepository implements BookRepository {
         em.remove(book);
     }
 
-    private void fetchGenresForBooks(List<Book> books) {
-        if (books == null || books.isEmpty()) {
-            return;
-        }
-
-        List<Long> ids = books.stream()
-                .map(Book::getId)
-                .toList();
-
-        em.createQuery(
-                        "select distinct b from Book b " +
-                                "left join fetch b.genres g " +
-                                "where b.id in :ids", Book.class
-                )
-                .setParameter("ids", ids)
-                .getResultList();
-    }
 }
