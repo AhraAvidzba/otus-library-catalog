@@ -1,4 +1,9 @@
 spring:
+  shell:
+    interactive:
+      enabled: false
+    script:
+      enabled: false
   datasource:
     url: jdbc:h2:mem:testdb
   sql:
