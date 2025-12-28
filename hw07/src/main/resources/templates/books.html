@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Library - Books</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border-bottom: 1px solid #ddd; padding: 8px; vertical-align: top; }
+    th { text-align: left; }
+    .row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .card { border: 1px solid #ddd; border-radius: 10px; padding: 12px; }
+    .card h2 { margin: 0 0 10px 0; font-size: 18px; }
+    .btn { cursor: pointer; padding: 6px 10px; border: 1px solid #888; background: #f7f7f7; border-radius: 8px; }
+    .btn-link { border: none; background: none; padding: 0; color: #0b62d6; cursor: pointer; }
+    .muted { color: #666; }
+    input, select { padding: 6px 8px; border-radius: 8px; border: 1px solid #bbb; }
+    .w100 { width: 100%; }
+  </style>
+</head>
+<body>
+<h1>Library</h1>
+<p class="muted">Books list + create/delete. Click a title to view details and comments.</p>
+
+<div class="row">
+  <div class="card" style="min-width: 320px; flex: 1;">
+    <h2>Add book</h2>
+    <form th:action="@{/books}" method="post" th:object="${newBook}">
+      <div style="margin-bottom: 10px;">
+        <label>Title</label><br/>
+        <input class="w100" type="text" th:field="*{title}" placeholder="Book title" required/>
+      </div>
+
+      <div style="margin-bottom: 10px;">
+        <label>Author</label><br/>
+        <select class="w100" th:field="*{authorId}" required>
+          <option value="0" disabled selected>Select author</option>
+          <option th:each="a : ${authors}" th:value="${a.id}" th:text="${a.fullName}"></option>
+        </select>
+      </div>
+
+      <div style="margin-bottom: 10px;">
+        <label>Genres (multi-select)</label><br/>
+        <select class="w100" th:field="*{genreIds}" multiple size="6" required>
+          <option th:each="g : ${genres}" th:value="${g.id}" th:text="${g.name}"></option>
+        </select>
+        <div class="muted" style="margin-top: 6px;">Hold Ctrl/Cmd to select multiple genres.</div>
+      </div>
+
+      <button class="btn" type="submit">Create</button>
+    </form>
+  </div>
+
+  <div class="card" style="flex: 2; min-width: 520px;">
+    <h2>Books</h2>
+    <table>
+      <thead>
+      <tr>
+        <th style="width: 80px;">Id</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genres</th>
+        <th style="width: 140px;">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="b : ${books}">
+        <td th:text="${b.id}"></td>
+        <td>
+          <a th:href="@{/books/{id}(id=${b.id})}" th:text="${b.title}"></a>
+        </td>
+        <td th:text="${b.authorFullName}"></td>
+        <td th:text="${#strings.listJoin(b.genres, ', ')}"></td>
+        <td>
+          <form th:action="@{/books/{id}/delete(id=${b.id})}" method="post" style="display:inline;">
+            <button class="btn" type="submit">Delete</button>
+          </form>
+          &nbsp;
+          <a class="btn-link" th:href="@{/books/{id}/edit(id=${b.id})}">Edit</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

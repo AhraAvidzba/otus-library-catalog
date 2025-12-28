@@ -1,11 +1,21 @@
 spring:
+  #Веб приложение?
+  main:
+    web-application-type: servlet #none - без веб
+#  отключить shell?
+  shell:
+    interactive:
+      enabled: true #true - взаимодействие через shell
+    script:
+      enabled: true #true - взаимодействие через shell
+
   datasource:
     url: jdbc:h2:mem:maindb
   sql:
     init:
       mode: always
-      data-locations: data.sql
-      schema-locations: schema.sql
+      data-locations: classpath:data.sql
+      schema-locations: classpath:schema.sql
 
   jpa:
     generate-ddl: false
