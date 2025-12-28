@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class JpaCommentRepository implements CommentRepository{
+public class JpaCommentRepository implements CommentRepository {
 
     @PersistenceContext
     private final EntityManager em;

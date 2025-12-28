@@ -38,8 +38,8 @@ public class CommentCommands {
 
     // bupd 4 editedBook 3 2,5
     @ShellMethod(value = "Update comment", key = "updCom")
-    public String updateComment(long id, String text, long BookId) {
-        var savedComment = commentService.update(id, text, BookId);
+    public String updateComment(long id, String text, long bookId) {
+        var savedComment = commentService.update(id, text, bookId);
         return commentConverter.commentToString(savedComment);
     }
 

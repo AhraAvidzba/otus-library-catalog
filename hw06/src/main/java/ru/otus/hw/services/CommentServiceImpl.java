@@ -31,6 +31,7 @@ public class CommentServiceImpl implements CommentService {
                         c.getBook().getTitle()
                 ));
     }
+
     @Override
     @Transactional
     public List<CommentDto> findByBookId(long bookId) {
