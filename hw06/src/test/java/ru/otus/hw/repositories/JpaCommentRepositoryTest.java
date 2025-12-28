@@ -69,7 +69,7 @@ class JpaCommentRepositoryTest {
         assertThat(reloaded.getBook().getId()).isEqualTo(1L);
     }
 
-    @DisplayName("Должен сохранять новый комментарий")
+    @DisplayName("Должен обновлять существующий комментарий")
     @Test
     void shouldUpdateExistingComment() {
         Book book = tem.find(Book.class, 3L);
