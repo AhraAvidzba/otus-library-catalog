@@ -1,0 +1,55 @@
+package ru.otus.hw.repositories;
+
+import jakarta.persistence.EntityGraph;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.models.Book;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+@RequiredArgsConstructor
+public class JpaBookRepository implements BookRepository {
+
+    private final EntityManager em;
+
+    @Override
+    public Optional<Book> findById(long id) {
+        EntityGraph<?> eg = em.getEntityGraph("book-with-author");
+        var query = em.createQuery("select b from Book b where b.id = :id", Book.class);
+        query.setParameter("id", id);
+        query.setHint("jakarta.persistence.fetchgraph", eg);
+        return query.getResultList().stream().findFirst();
+    }
+
+
+    @Override
+    public List<Book> findAll() {
+        EntityGraph<?> eg = em.getEntityGraph("book-with-author");
+        var query = em.createQuery("select b from Book b", Book.class);
+        query.setHint("jakarta.persistence.fetchgraph", eg);
+        return query.getResultList();
+    }
+
+    @Override
+    public Book save(Book book) {
+        if (book.getId() == 0) {
+            em.persist(book);
+            return book;              // book становится managed и id появится после flush/commit
+        }
+        return em.merge(book);        // вернет managed-объект (НЕ тот же самый экземпляр)
+    }
+
+    @Override
+    public void deleteById(long id) {
+        Book book = em.find(Book.class, id);
+        if (book == null) {
+            throw new EntityNotFoundException("Book with id %d not found".formatted(id));
+        }
+        em.remove(book);
+    }
+
+}
