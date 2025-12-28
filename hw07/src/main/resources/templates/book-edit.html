@@ -1,50 +1,96 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edit book</title>
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 20px; }
-    .card { border: 1px solid #ddd; border-radius: 10px; padding: 12px; max-width: 720px; }
-    .btn { cursor: pointer; padding: 6px 10px; border: 1px solid #888; background: #f7f7f7; border-radius: 8px; }
-    .btn-link { border: none; background: none; padding: 0; color: #0b62d6; cursor: pointer; }
-    input, select { padding: 6px 8px; border-radius: 8px; border: 1px solid #bbb; }
-    .w100 { width: 100%; }
-    .muted { color: #666; }
-  </style>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Edit book</title>
+
+    <style>
+        /* ✅ главное: чтобы width:100% не вылезало из-за padding/border */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+          font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+          margin: 20px;
+        }
+
+        .card {
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          padding: 12px;
+          max-width: 720px;
+          min-width: 0;
+        }
+
+        .btn {
+          cursor: pointer;
+          padding: 6px 10px;
+          border: 1px solid #888;
+          background: #f7f7f7;
+          border-radius: 8px;
+        }
+
+        .btn-link {
+          border: none;
+          background: none;
+          padding: 0;
+          color: #0b62d6;
+          cursor: pointer;
+        }
+
+        input, select, textarea {
+          padding: 6px 8px;
+          border-radius: 8px;
+          border: 1px solid #bbb;
+          width: 100%;
+          max-width: 100%;
+        }
+
+        input:focus, select:focus, textarea:focus {
+          outline-offset: 0;
+        }
+
+        .w100 { width: 100%; }
+        .muted { color: #666; }
+    </style>
 </head>
 <body>
+
 <p><a class="btn-link" th:href="@{/books/{id}(id=${book.id})}">← Back to book</a></p>
 
 <div class="card">
-  <h1>Edit book</h1>
-  <p class="muted">Id: <span th:text="${book.id}"></span></p>
+    <h1>Edit book</h1>
+    <p class="muted">Id: <span th:text="${book.id}"></span></p>
 
-  <form th:action="@{/books/{id}/edit(id=${book.id})}" method="post" th:object="${editBook}">
-    <div style="margin-bottom: 10px;">
-      <label>Title</label><br/>
-      <input class="w100" type="text" th:field="*{title}" required/>
-    </div>
+    <form th:action="@{/books/{id}/edit(id=${book.id})}" method="post" th:object="${editBook}">
+        <div style="margin-bottom: 10px;">
+            <label>Title</label><br/>
+            <input type="text" th:field="*{title}" required/>
+        </div>
 
-    <div style="margin-bottom: 10px;">
-      <label>Author</label><br/>
-      <select class="w100" th:field="*{authorId}" required>
-        <option th:each="a : ${authors}" th:value="${a.id}" th:text="${a.fullName}" th:selected="${a.id} == ${book.authorId}"></option>
-      </select>
-    </div>
+        <div style="margin-bottom: 10px;">
+            <label>Author</label><br/>
+            <select th:field="*{authorId}" required>
+                <option th:each="a : ${authors}"
+                        th:value="${a.id}"
+                        th:text="${a.fullName}"
+                        th:selected="${a.id} == ${book.authorId}">
+                </option>
+            </select>
+        </div>
 
-    <div style="margin-bottom: 10px;">
-      <label>Genres (multi-select)</label><br/>
-      <select class="w100" th:field="*{genreIds}" multiple size="6" required>
-        <option th:each="g : ${genres}" th:value="${g.id}" th:text="${g.name}"></option>
-      </select>
-      <div class="muted" style="margin-top: 6px;">Re-select genres (current genres are shown below).</div>
-      <div class="muted" th:text="'Current: ' + ${#strings.listJoin(book.genres, ', ')}"></div>
-    </div>
+        <div style="margin-bottom: 10px;">
+            <label>Genres (multi-select)</label><br/>
+            <select th:field="*{genreIds}" multiple size="6" required>
+                <option th:each="g : ${genres}" th:value="${g.id}" th:text="${g.name}"></option>
+            </select>
+            <div class="muted" style="margin-top: 6px;">
+                Current: <span th:text="${#strings.listJoin(book.genres, ', ')}"></span>
+            </div>
+        </div>
 
-    <button class="btn" type="submit">Save</button>
-  </form>
+        <button class="btn" type="submit">Save</button>
+    </form>
 </div>
 
 </body>
