@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Genre;
 
 import java.util.Set;
@@ -13,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("JPA репозиторий жанров")
 @DataJpaTest
-@Import(JpaGenreRepository.class)
 class JpaGenreRepositoryTest {
 
     @Autowired
@@ -32,8 +30,8 @@ class JpaGenreRepositoryTest {
 
     @DisplayName("должен находить жанры по набору id")
     @Test
-    void shouldFindAllByIds() {
-        var genres = genreRepository.findAllByIds(Set.of(1L, 3L, 6L));
+    void shouldFindAllByIdIn() {
+        var genres = genreRepository.findAllByIdIn(Set.of(1L, 3L, 6L));
         assertThat(genres)
                 .hasSize(3)
                 .extracting(Genre::getName)
@@ -43,7 +41,7 @@ class JpaGenreRepositoryTest {
     @DisplayName("должен возвращать пустой список для пустого набора id")
     @Test
     void shouldReturnEmptyForEmptyIds() {
-        assertThat(genreRepository.findAllByIds(Set.of())).isEmpty();
-        assertThat(genreRepository.findAllByIds(null)).isEmpty();
+        assertThat(genreRepository.findAllByIdIn(Set.of())).isEmpty();
+        assertThat(genreRepository.findAllByIdIn(null)).isEmpty();
     }
 }
