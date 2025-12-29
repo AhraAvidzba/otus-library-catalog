@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.hw.dto.CommentDto;
+import ru.otus.hw.dto.CommentResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +40,7 @@ class CommentServiceIT {
         var dtos = commentService.findByBookId(1L);
         assertThat(dtos)
                 .hasSize(2)
-                .extracting(CommentDto::text)
+                .extracting(CommentResponse::text)
                 .containsExactlyInAnyOrder("Классная книга!", "Ну такое...");
     }
 

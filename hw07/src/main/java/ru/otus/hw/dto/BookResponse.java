@@ -2,7 +2,7 @@ package ru.otus.hw.dto;
 
 import java.util.List;
 
-public record BookDto(
+public record BookResponse(
         long id,
         String title,
         long authorId,

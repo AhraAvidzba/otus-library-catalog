@@ -32,4 +32,21 @@ public class JpaGenreRepository implements GenreRepository {
         query.setParameter("ids", ids);
         return query.getResultList();
     }
+
+    @Override
+    public Genre save(Genre genre) {
+        if (genre.getId() == 0) {
+            em.persist(genre);
+            return genre;
+        }
+        return em.merge(genre);
+    }
+
+    @Override
+    public void deleteById(long id) {
+        var ref = em.find(Genre.class, id);
+        if (ref != null) {
+            em.remove(ref);
+        }
+    }
 }

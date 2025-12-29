@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface GenreService {
     List<Genre> findAll();
+
+    Genre create(String name);
+
+    void deleteById(long id);
 }

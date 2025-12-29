@@ -19,7 +19,16 @@ public class AuthorServiceImpl implements AuthorService {
         return authorRepository.findAll();
     }
 
-    public static class CommentServiceImpl extends BookService.CommentService {
+    @Override
+    @Transactional
+    public Author create(String fullName) {
+        var author = new Author(0, fullName);
+        return authorRepository.save(author);
+    }
 
+    @Override
+    @Transactional
+    public void deleteById(long id) {
+        authorRepository.deleteById(id);
     }
 }

@@ -30,4 +30,21 @@ public class JpaAuthorRepository implements AuthorRepository {
         query.setParameter("id", id);
         return query.getResultList().stream().findFirst();
     }
+
+    @Override
+    public Author save(Author author) {
+        if (author.getId() == 0) {
+            em.persist(author);
+            return author;
+        }
+        return em.merge(author);
+    }
+
+    @Override
+    public void deleteById(long id) {
+        var ref = em.find(Author.class, id);
+        if (ref != null) {
+            em.remove(ref);
+        }
+    }
 }

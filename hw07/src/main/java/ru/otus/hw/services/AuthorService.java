@@ -6,4 +6,9 @@ import java.util.List;
 
 public interface AuthorService {
     List<Author> findAll();
+
+    Author create(String fullName);
+
+    void deleteById(long id);
 }
+
