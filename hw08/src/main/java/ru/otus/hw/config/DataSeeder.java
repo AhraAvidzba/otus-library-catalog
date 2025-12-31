@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Profile("!test") // чтобы в тестах не мешал (для тестов сделаем отдельный)
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class DataInitRunner implements CommandLineRunner {
+public class DataSeeder implements CommandLineRunner {
 
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
@@ -32,7 +32,6 @@ public class DataInitRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        System.out.println(">>> DataInitRunner started");
         // 1) Чтобы при каждом запуске было "как в data.sql" и без дублей:
         commentRepository.deleteAll();
         bookRepository.deleteAll();
@@ -62,11 +61,6 @@ public class DataInitRunner implements CommandLineRunner {
         commentRepository.save(new Comment(null, "Comment_2", b1));
         commentRepository.save(new Comment(null, "Comment_3", b3));
         commentRepository.save(new Comment(null, "Comment_4", b3));
-
-        System.out.println("Authors count = " + authorRepository.count());
-        System.out.println("Genres count = " + genreRepository.count());
-        System.out.println("Books count = " + bookRepository.count());
-        System.out.println("Comments count = " + commentRepository.count());
     }
 
     @PostConstruct
