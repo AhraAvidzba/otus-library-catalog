@@ -1,21 +1,31 @@
 package ru.otus.hw.repositories;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import ru.otus.hw.config.MongoIdListener;
 import ru.otus.hw.models.Genre;
+import ru.otus.hw.services.SequenceGeneratorService;
+import ru.otus.hw.testdata.TestDataSeeder;
 
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("JPA репозиторий жанров")
-@DataJpaTest
+@DataMongoTest
+@Import({SequenceGeneratorService.class, MongoIdListener.class, TestDataSeeder.class})
 class JpaGenreRepositoryTest {
 
     @Autowired
     private GenreRepository genreRepository;
+
+    @Autowired
+    TestDataSeeder seeder;
 
     @DisplayName("должен возвращать все жанры")
     @Test
@@ -43,5 +53,10 @@ class JpaGenreRepositoryTest {
     void shouldReturnEmptyForEmptyIds() {
         assertThat(genreRepository.findAllByIdIn(Set.of())).isEmpty();
         assertThat(genreRepository.findAllByIdIn(null)).isEmpty();
+    }
+
+    @BeforeEach
+    void setUp() {
+        seeder.seed();
     }
 }

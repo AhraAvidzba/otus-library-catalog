@@ -9,22 +9,14 @@ spring:
     script:
       enabled: true #true - взаимодействие через shell
 
-  datasource:
-    url: jdbc:h2:mem:maindb
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:data.sql
-      schema-locations: classpath:schema.sql
+  data:
+    mongodb:
+      # локально (если есть запущенный mongo):
+      uri: mongodb://localhost:27017/maindb
 
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-
-    show-sql: true
-
-    properties:
-      hibernate:
-        format_sql: true
-        highlight_sql: true   # подсветка (если терминал/логгер поддерживает)
+#    show-sql: true
+#
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        highlight_sql: true   # подсветка (если терминал/логгер поддерживает)

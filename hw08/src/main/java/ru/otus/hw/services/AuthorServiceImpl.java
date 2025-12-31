@@ -14,20 +14,17 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
 
     @Override
-    @Transactional
     public Author create(String fullName) {
         var author = new Author(0, fullName);
         return authorRepository.save(author);
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
         authorRepository.deleteById(id);
     }

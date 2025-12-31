@@ -1,17 +1,17 @@
 spring:
+  data:
+    mongodb:
+      database: testdb
   shell:
+    command:
+      version:
+        enabled: false
     interactive:
       enabled: false
-    script:
-      enabled: false
-  datasource:
-    url: jdbc:h2:mem:testdb
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:data.sql
-      schema-locations: classpath:schema.sql
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
+
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: "7.0.5"

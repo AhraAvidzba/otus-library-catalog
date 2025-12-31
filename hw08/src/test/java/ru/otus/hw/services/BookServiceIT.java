@@ -1,12 +1,15 @@
 package ru.otus.hw.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.hw.testdata.TestDataSeeder;
 
 import java.util.Set;
 
@@ -17,10 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ActiveProfiles("test")
 class BookServiceIT {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    TestDataSeeder seeder;
 
     @DisplayName("должен возвращать DTO книги со всеми нужными полями")
     @Test
@@ -74,5 +81,10 @@ class BookServiceIT {
         assertThat(bookService.findById(2L)).isPresent();
         bookService.deleteById(2L);
         assertThat(bookService.findById(2L)).isEmpty();
+    }
+
+    @BeforeEach
+    void setUp() {
+        seeder.seed();
     }
 }

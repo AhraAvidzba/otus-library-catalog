@@ -27,37 +27,30 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<BookResponse> findById(long id) {
         var book = bookRepository.findById(id);
-        book.ifPresent(b -> b.getGenres().size());
         return book.map(this::toDto);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<BookResponse> findAll() {
         var books = bookRepository.findAll();
-        books.forEach(b -> b.getGenres().size());
         return books.stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Override
-    @Transactional
     public BookResponse insert(String title, long authorId, Set<Long> genresIds) {
         return save(0, title, authorId, genresIds);
     }
 
     @Override
-    @Transactional
     public BookResponse update(long id, String title, long authorId, Set<Long> genresIds) {
         return save(id, title, authorId, genresIds);
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
         bookRepository.deleteById(id);
     }

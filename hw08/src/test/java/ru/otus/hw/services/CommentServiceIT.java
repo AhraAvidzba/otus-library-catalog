@@ -1,25 +1,32 @@
 package ru.otus.hw.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.dto.CommentResponse;
+import ru.otus.hw.testdata.TestDataSeeder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@DisplayName("Интеграционные тесты BookService")
+@DisplayName("Интеграционные тесты CommentService")
 @SpringBootTest
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ActiveProfiles("test")
 class CommentServiceIT {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    TestDataSeeder seeder;
 
     @DisplayName("должен возвращать DTO комментария")
     @Test
@@ -30,7 +37,7 @@ class CommentServiceIT {
         var dto = dtoOpt.get();
         assertThat(dto.id()).isEqualTo(4L);
         assertThat(dto.bookId()).isEqualTo(3L);
-        assertThat(dto.text()).isEqualTo("Фигня какая-то :(");
+        assertThat(dto.text()).isEqualTo("Comment_4");
         assertThat(dto.bookTitle()).isEqualTo("BookTitle_3");
     }
 
@@ -41,7 +48,7 @@ class CommentServiceIT {
         assertThat(dtos)
                 .hasSize(2)
                 .extracting(CommentResponse::text)
-                .containsExactlyInAnyOrder("Классная книга!", "Ну такое...");
+                .containsExactlyInAnyOrder("Comment_1", "Comment_2");
     }
 
     @DisplayName("должен вставлять новый комментарий")
@@ -72,5 +79,10 @@ class CommentServiceIT {
         assertThat(commentService.findById(2L)).isPresent();
         commentService.deleteById(2L);
         assertThat(commentService.findById(2L)).isEmpty();
+    }
+
+    @BeforeEach
+    void setUp() {
+        seeder.seed();
     }
 }

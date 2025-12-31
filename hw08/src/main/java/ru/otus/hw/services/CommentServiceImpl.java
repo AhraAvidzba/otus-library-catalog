@@ -21,7 +21,6 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<CommentResponse> findById(long id) {
         return commentRepository.findById(id)
                 .map(c -> new CommentResponse(
@@ -33,7 +32,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public List<CommentResponse> findByBookId(long bookId) {
         return commentRepository.findByBookId(bookId).stream()
                 .map(c -> new CommentResponse(
@@ -46,19 +44,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public CommentResponse insert(String text, long bookId) {
         return save(0, text, bookId);
     }
 
     @Override
-    @Transactional
     public CommentResponse update(long id, String text, long bookId) {
         return save(id, text, bookId);
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) {
         commentRepository.deleteById(id);
     }

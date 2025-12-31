@@ -1,6 +1,5 @@
 package ru.otus.hw.web;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +20,10 @@ public class RestExceptionHandler {
     ) {
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiError> handleNotFound(EntityNotFoundException ex, HttpServletRequest request) {
-        return error(HttpStatus.NOT_FOUND, ex, request);
-    }
+//    @ExceptionHandler(EntityNotFoundException.class)
+//    public ResponseEntity<ApiError> handleNotFound(EntityNotFoundException ex, HttpServletRequest request) {
+//        return error(HttpStatus.NOT_FOUND, ex, request);
+//    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> handleBadRequest(IllegalArgumentException ex, HttpServletRequest request) {

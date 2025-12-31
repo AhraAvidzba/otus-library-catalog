@@ -1,25 +1,37 @@
 package ru.otus.hw.repositories;
 
-import jakarta.persistence.PersistenceUnitUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import ru.otus.hw.config.MongoIdListener;
+import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Comment;
+import ru.otus.hw.services.SequenceGeneratorService;
+import ru.otus.hw.testdata.TestDataSeeder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("JPA репозиторий комментариев")
-@DataJpaTest
+@DataMongoTest
+@Import({SequenceGeneratorService.class, MongoIdListener.class, TestDataSeeder.class})
+
 class JpaCommentRepositoryTest {
 
     @Autowired
     private CommentRepository commentRepository;
 
     @Autowired
-    private TestEntityManager tem;
+    private MongoTemplate mongoTemplate;
+
+    @Autowired
+    TestDataSeeder seeder;
 
     @DisplayName("должен находить комментарий по id и подгружать книгу через EntityGraph")
     @Test
@@ -28,12 +40,7 @@ class JpaCommentRepositoryTest {
         assertThat(commentOpt).isPresent();
         var comment = commentOpt.get();
         assertThat(comment.getId()).isEqualTo(1L);
-        assertThat(comment.getText()).isEqualTo("Классная книга!");
-
-        PersistenceUnitUtil util = tem.getEntityManager().getEntityManagerFactory().getPersistenceUnitUtil();
-        assertThat(util.isLoaded(comment, "book"))
-                .as("book должен быть загружен через fetchgraph")
-                .isTrue();
+        assertThat(comment.getText()).isEqualTo("Comment_1");
         assertThat(comment.getBook().getTitle()).isEqualTo("BookTitle_1");
     }
 
@@ -44,7 +51,7 @@ class JpaCommentRepositoryTest {
         assertThat(comments)
                 .hasSize(2)
                 .extracting(Comment::getText)
-                .containsExactlyInAnyOrder("Классная книга!", "Ну такое...");
+                .containsExactlyInAnyOrder("Comment_1", "Comment_2");
         assertThat(comments)
                 .allMatch(c -> c.getBook() != null && c.getBook().getId() == 1L);
     }
@@ -52,12 +59,9 @@ class JpaCommentRepositoryTest {
     @DisplayName("Должен сохранять новый комментарий")
     @Test
     void shouldInsertNewComment() {
-        Book book = tem.find(Book.class, 1L);
+        Book book = mongoTemplate.findById(1L, Book.class, "books");
         Comment comment = new Comment(0,"я в восторге", book);
         Comment saved = commentRepository.save(comment);
-
-        tem.flush();
-        tem.clear();
 
         assertThat(saved.getId()).isPositive();
 
@@ -69,12 +73,9 @@ class JpaCommentRepositoryTest {
     @DisplayName("Должен обновлять существующий комментарий")
     @Test
     void shouldUpdateExistingComment() {
-        Book book = tem.find(Book.class, 3L);
+        Book book = mongoTemplate.findById(3L, Book.class, "books");
         Comment comment = new Comment(1,"я в восторге", book);
         Comment saved = commentRepository.save(comment);
-
-        tem.flush();
-        tem.clear();
 
         assertThat(saved.getId()).isPositive();
 
@@ -89,8 +90,11 @@ class JpaCommentRepositoryTest {
     void shouldDeleteCommentById() {
         assertThat(commentRepository.findById(1L)).isPresent();
         commentRepository.deleteById(1L);
-        tem.flush();
-        tem.clear();
         assertThat(commentRepository.findById(1L)).isNotPresent();
+    }
+
+    @BeforeEach
+    void setUp() {
+        seeder.seed();
     }
 }
