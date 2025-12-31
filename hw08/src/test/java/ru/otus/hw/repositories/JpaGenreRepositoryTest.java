@@ -5,11 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.config.MongoIdListener;
 import ru.otus.hw.models.Genre;
-import ru.otus.hw.services.SequenceGeneratorService;
 import ru.otus.hw.testdata.TestDataSeeder;
 
 import java.util.Set;
@@ -18,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("JPA репозиторий жанров")
 @DataMongoTest
-@Import({SequenceGeneratorService.class, MongoIdListener.class, TestDataSeeder.class})
+@Import({TestDataSeeder.class})
 class JpaGenreRepositoryTest {
 
     @Autowired
@@ -41,7 +38,7 @@ class JpaGenreRepositoryTest {
     @DisplayName("должен находить жанры по набору id")
     @Test
     void shouldFindAllByIdIn() {
-        var genres = genreRepository.findAllByIdIn(Set.of(1L, 3L, 6L));
+        var genres = genreRepository.findAllByIdIn(Set.of("1", "3", "6"));
         assertThat(genres)
                 .hasSize(3)
                 .extracting(Genre::getName)

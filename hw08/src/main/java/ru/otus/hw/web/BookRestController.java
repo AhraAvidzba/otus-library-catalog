@@ -31,10 +31,10 @@ public class BookRestController {
     }
 
     @GetMapping("/{id}")
-    public BookResponse findById(@PathVariable long id) {
+    public BookResponse findById(@PathVariable String id) {
         return bookService.findById(id)
                 .orElseThrow(() -> new ru.otus.hw.exceptions.EntityNotFoundException(
-                        "Book with id %d not found".formatted(id)
+                        "Book with id %s not found".formatted(id)
                 ));
     }
 
@@ -52,12 +52,12 @@ public class BookRestController {
     }
 
     @PutMapping("/{id}")
-    public BookResponse update(@PathVariable long id, @RequestBody BookUpsertRequest request) {
+    public BookResponse update(@PathVariable String id, @RequestBody BookUpsertRequest request) {
         return bookService.update(id, request.title(), request.authorId(), request.genreIds());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         bookService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

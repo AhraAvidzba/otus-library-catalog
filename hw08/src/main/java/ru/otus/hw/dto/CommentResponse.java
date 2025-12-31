@@ -1,8 +1,8 @@
 package ru.otus.hw.dto;
 
 public record CommentResponse(
-        long id,
+        String id,
         String text,
-        long bookId,
+        String bookId,
         String bookTitle
 ) {}

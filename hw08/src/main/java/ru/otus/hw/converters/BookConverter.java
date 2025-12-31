@@ -17,7 +17,7 @@ public class BookConverter {
         var genresString = book.genres().stream()
                 .map("{%s}"::formatted)
                 .collect(Collectors.joining(", "));
-        return "Id: %d, title: %s, author: %s, genres: [%s]".formatted(
+        return "Id: %s, title: %s, author: %s, genres: [%s]".formatted(
                 book.id(),
                 book.title(),
                 book.authorFullName(),

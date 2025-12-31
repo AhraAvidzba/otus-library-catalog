@@ -38,7 +38,7 @@ public class GenreRestController {
 
     @DeleteMapping("/{id}")
     @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable String id) {
         genreService.deleteById(id);
     }
 }

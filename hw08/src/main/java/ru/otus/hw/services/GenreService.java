@@ -9,5 +9,5 @@ public interface GenreService {
 
     Genre create(String name);
 
-    void deleteById(long id);
+    void deleteById(String id);
 }

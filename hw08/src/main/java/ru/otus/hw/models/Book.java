@@ -18,7 +18,7 @@ import java.util.List;
 @Document("books")
 public class Book {
     @Id
-    private long id;
+    private String id;
 
     private String title;
 

@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public record BookUpsertRequest(
         String title,
-        long authorId,
-        Set<Long> genreIds
+        String authorId,
+        Set<String> genreIds
 ) {
 }

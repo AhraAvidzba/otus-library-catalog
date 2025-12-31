@@ -27,7 +27,7 @@ public class CommentRestController {
      * List comments for a book.
      */
     @GetMapping("/api/books/{bookId}/comments")
-    public List<CommentResponse> findByBookId(@PathVariable long bookId) {
+    public List<CommentResponse> findByBookId(@PathVariable String bookId) {
         return commentService.findByBookId(bookId);
     }
 
@@ -35,7 +35,7 @@ public class CommentRestController {
      * Create a comment for a book.
      */
     @PostMapping("/api/books/{bookId}/comments")
-    public ResponseEntity<CommentResponse> create(@PathVariable long bookId,
+    public ResponseEntity<CommentResponse> create(@PathVariable String bookId,
                                                   @RequestBody CommentUpsertRequest request) {
         var created = commentService.insert(request.text(), bookId);
 
@@ -49,10 +49,10 @@ public class CommentRestController {
     }
 
     @GetMapping("/api/comments/{id}")
-    public CommentResponse findById(@PathVariable long id) {
+    public CommentResponse findById(@PathVariable String id) {
         return commentService.findById(id)
                 .orElseThrow(() -> new ru.otus.hw.exceptions.EntityNotFoundException(
-                        "Comment with id %d not found".formatted(id)
+                        "Comment with id %s not found".formatted(id)
                 ));
     }
 
@@ -60,16 +60,16 @@ public class CommentRestController {
      * Update a comment. By design, we keep the comment bound to the same book.
      */
     @PutMapping("/api/comments/{id}")
-    public CommentResponse update(@PathVariable long id, @RequestBody CommentUpsertRequest request) {
+    public CommentResponse update(@PathVariable String id, @RequestBody CommentUpsertRequest request) {
         var existing = commentService.findById(id)
                 .orElseThrow(() -> new ru.otus.hw.exceptions.EntityNotFoundException(
-                        "Comment with id %d not found".formatted(id)
+                        "Comment with id %s not found".formatted(id)
                 ));
         return commentService.update(id, request.text(), existing.bookId());
     }
 
     @DeleteMapping("/api/comments/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         commentService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

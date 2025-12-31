@@ -2,7 +2,6 @@ package ru.otus.hw.config;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
@@ -41,28 +40,28 @@ public class DataInitRunner implements CommandLineRunner {
         authorRepository.deleteAll();
 
         // 2) Создаём авторов (id назначится автоматически твоим MongoIdListener'ом)
-        Author a1 = authorRepository.save(new Author(0, "Author_1"));
-        Author a2 = authorRepository.save(new Author(0, "Author_2"));
-        Author a3 = authorRepository.save(new Author(0, "Author_3"));
+        Author a1 = authorRepository.save(new Author(null, "Author_1"));
+        Author a2 = authorRepository.save(new Author(null, "Author_2"));
+        Author a3 = authorRepository.save(new Author(null, "Author_3"));
 
         // 3) Жанры
-        Genre g1 = genreRepository.save(new Genre(0, "Genre_1"));
-        Genre g2 = genreRepository.save(new Genre(0, "Genre_2"));
-        Genre g3 = genreRepository.save(new Genre(0, "Genre_3"));
-        Genre g4 = genreRepository.save(new Genre(0, "Genre_4"));
-        Genre g5 = genreRepository.save(new Genre(0, "Genre_5"));
-        Genre g6 = genreRepository.save(new Genre(0, "Genre_6"));
+        Genre g1 = genreRepository.save(new Genre(null, "Genre_1"));
+        Genre g2 = genreRepository.save(new Genre(null, "Genre_2"));
+        Genre g3 = genreRepository.save(new Genre(null, "Genre_3"));
+        Genre g4 = genreRepository.save(new Genre(null, "Genre_4"));
+        Genre g5 = genreRepository.save(new Genre(null, "Genre_5"));
+        Genre g6 = genreRepository.save(new Genre(null, "Genre_6"));
 
         // 4) Книги + связи
-        Book b1 = bookRepository.save(new Book(0, "BookTitle_1", a1, List.of(g1, g2)));
-        Book b2 = bookRepository.save(new Book(0, "BookTitle_2", a2, List.of(g3, g4)));
-        Book b3 = bookRepository.save(new Book(0, "BookTitle_3", a3, List.of(g5, g6)));
+        Book b1 = bookRepository.save(new Book(null, "BookTitle_1", a1, List.of(g1, g2)));
+        Book b2 = bookRepository.save(new Book(null, "BookTitle_2", a2, List.of(g3, g4)));
+        Book b3 = bookRepository.save(new Book(null, "BookTitle_3", a3, List.of(g5, g6)));
 
         // 5) Комментарии
-        commentRepository.save(new Comment(0, "Comment_1", b1));
-        commentRepository.save(new Comment(0, "Comment_2", b1));
-        commentRepository.save(new Comment(0, "Comment_3", b3));
-        commentRepository.save(new Comment(0, "Comment_4", b3));
+        commentRepository.save(new Comment(null, "Comment_1", b1));
+        commentRepository.save(new Comment(null, "Comment_2", b1));
+        commentRepository.save(new Comment(null, "Comment_3", b3));
+        commentRepository.save(new Comment(null, "Comment_4", b3));
 
         System.out.println("Authors count = " + authorRepository.count());
         System.out.println("Genres count = " + genreRepository.count());

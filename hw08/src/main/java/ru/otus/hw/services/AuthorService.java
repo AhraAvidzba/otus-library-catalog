@@ -9,6 +9,6 @@ public interface AuthorService {
 
     Author create(String fullName);
 
-    void deleteById(long id);
+    void deleteById(String id);
 }
 

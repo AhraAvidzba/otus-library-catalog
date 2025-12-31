@@ -3,9 +3,9 @@ package ru.otus.hw.dto;
 import java.util.List;
 
 public record BookResponse(
-        long id,
+        String id,
         String title,
-        long authorId,
+        String authorId,
         String authorFullName,
         List<String> genres
 ) {}

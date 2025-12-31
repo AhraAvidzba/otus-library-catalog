@@ -31,12 +31,12 @@ class CommentServiceIT {
     @DisplayName("должен возвращать DTO комментария")
     @Test
     void shouldReturnCommentDto() {
-        var dtoOpt = commentService.findById(4L);
+        var dtoOpt = commentService.findById("4");
         assertThat(dtoOpt).isPresent();
 
         var dto = dtoOpt.get();
-        assertThat(dto.id()).isEqualTo(4L);
-        assertThat(dto.bookId()).isEqualTo(3L);
+        assertThat(dto.id()).isEqualTo("4");
+        assertThat(dto.bookId()).isEqualTo("3");
         assertThat(dto.text()).isEqualTo("Comment_4");
         assertThat(dto.bookTitle()).isEqualTo("BookTitle_3");
     }
@@ -44,7 +44,7 @@ class CommentServiceIT {
     @DisplayName("должен возвращать все комментарии по id книги")
     @Test
     void shouldReturnCommentsByBookId() {
-        var dtos = commentService.findByBookId(1L);
+        var dtos = commentService.findByBookId("1");
         assertThat(dtos)
                 .hasSize(2)
                 .extracting(CommentResponse::text)
@@ -54,31 +54,31 @@ class CommentServiceIT {
     @DisplayName("должен вставлять новый комментарий")
     @Test
     void shouldInsertComment() {
-        var created = commentService.insert("Inserted comment", 1L);
-        assertThat(created.id()).isPositive();
+        var created = commentService.insert("Inserted comment", "1");
+        assertThat(created.id()).isNotEmpty();
         assertThat(created.bookTitle()).isEqualTo("BookTitle_1");
 
         var loaded = commentService.findById(created.id()).orElseThrow();
         assertThat(loaded.text()).isEqualTo("Inserted comment");
-        assertThat(loaded.bookId()).isEqualTo(1L);
+        assertThat(loaded.bookId()).isEqualTo("1");
     }
 
     @DisplayName("должен обновлять существующий комментарий")
     @Test
     void shouldUpdateBook() {
-        var updated = commentService.update(1L, "Updated text", 3L);
-        assertThat(updated.id()).isEqualTo(1L);
+        var updated = commentService.update("1", "Updated text", "3");
+        assertThat(updated.id()).isEqualTo("1");
         assertThat(updated.text()).isEqualTo("Updated text");
-        assertThat(updated.bookId()).isEqualTo(3L);
+        assertThat(updated.bookId()).isEqualTo("3");
         assertThat(updated.bookTitle()).isEqualTo("BookTitle_3");
     }
 
     @DisplayName("должен удалять комментарий")
     @Test
     void shouldDeleteBook() {
-        assertThat(commentService.findById(2L)).isPresent();
-        commentService.deleteById(2L);
-        assertThat(commentService.findById(2L)).isEmpty();
+        assertThat(commentService.findById("2")).isPresent();
+        commentService.deleteById("2");
+        assertThat(commentService.findById("2")).isEmpty();
     }
 
     @BeforeEach

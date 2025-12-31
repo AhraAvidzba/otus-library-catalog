@@ -2,7 +2,6 @@ package ru.otus.hw.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.GenreRepository;
 
@@ -20,12 +19,12 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre create(String name) {
-        var genre = new Genre(0, name);
+        var genre = new Genre(null, name);
         return genreRepository.save(genre);
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         genreRepository.deleteById(id);
     }
 }

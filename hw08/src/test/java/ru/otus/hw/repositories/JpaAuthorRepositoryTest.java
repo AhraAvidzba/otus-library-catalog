@@ -5,18 +5,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import ru.otus.hw.config.MongoIdListener;
 import ru.otus.hw.models.Author;
-import ru.otus.hw.services.SequenceGeneratorService;
 import ru.otus.hw.testdata.TestDataSeeder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("JPA репозиторий авторов")
 @DataMongoTest
-@Import({SequenceGeneratorService.class, MongoIdListener.class, TestDataSeeder.class})
+@Import({TestDataSeeder.class})
 class JpaAuthorRepositoryTest {
 
     @Autowired
@@ -28,10 +25,10 @@ class JpaAuthorRepositoryTest {
     @DisplayName("должен находить автора по id")
     @Test
     void shouldFindById() {
-        var authorOpt = authorRepository.findById(1L);
+        var authorOpt = authorRepository.findById("1");
         assertThat(authorOpt).isPresent();
         var author = authorOpt.get();
-        assertThat(author.getId()).isEqualTo(1L);
+        assertThat(author.getId()).isEqualTo("1");
         assertThat(author.getFullName()).isEqualTo("Author_1");
     }
 

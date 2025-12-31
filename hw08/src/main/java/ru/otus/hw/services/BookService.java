@@ -7,15 +7,15 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface BookService {
-    Optional<BookResponse> findById(long id);
+    Optional<BookResponse> findById(String id);
 
     List<BookResponse> findAll();
 
-    BookResponse insert(String title, long authorId, Set<Long> genresIds);
+    BookResponse insert(String title, String authorId, Set<String> genresIds);
 
-    BookResponse update(long id, String title, long authorId, Set<Long> genresIds);
+    BookResponse update(String id, String title, String authorId, Set<String> genresIds);
 
-    void deleteById(long id);
+    void deleteById(String id);
 
     class CommentService {
 
