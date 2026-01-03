@@ -1,0 +1,59 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="commentsBlock(book, comments, editCommentId)">
+
+    <div class="card" style="margin-top:16px;">
+        <div style="font-size:16px;font-weight:700;margin-bottom:10px;">Comments</div>
+
+        <form th:action="@{/books/{bookId}/comments/create(bookId=${book.id})}"
+              method="post" class="actions comment-edit" style="margin-bottom:12px;">
+            <input type="text" name="text" placeholder="Add a comment..." required/>
+            <button class="btn btn-primary" type="submit">Add</button>
+        </form>
+
+        <div th:if="${#lists.isEmpty(comments)}" class="muted">No comments yet.</div>
+
+        <table th:if="${!#lists.isEmpty(comments)}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Text</th>
+                <th class="col-actions">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${comments}">
+                <td th:text="${c.id}">id</td>
+
+                <td>
+                    <div th:if="${editCommentId != null and editCommentId == c.id}">
+                        <form th:action="@{/books/{bookId}/comments/{commentId}/edit(bookId=${book.id}, commentId=${c.id})}"
+                              method="post" class="actions comment-edit">
+                            <input type="text" name="text" th:value="${c.text}" required/>
+                            <button class="btn btn-primary" type="submit">Save</button>
+                            <a class="btn" th:href="@{/books/{id}(id=${book.id})}">Cancel</a>
+                        </form>
+                    </div>
+
+                    <div th:unless="${editCommentId != null and editCommentId == c.id}">
+                        <span th:text="${c.text}">text</span>
+                    </div>
+                </td>
+
+                <td class="col-actions">
+                    <div class="actions" th:unless="${editCommentId != null and editCommentId == c.id}">
+                        <a class="btn" th:href="@{/books/{id}(id=${book.id}, editCommentId=${c.id})}">Edit</a>
+
+                        <form th:action="@{/books/{bookId}/comments/{commentId}/delete(bookId=${book.id}, commentId=${c.id})}"
+                              method="post">
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</html>

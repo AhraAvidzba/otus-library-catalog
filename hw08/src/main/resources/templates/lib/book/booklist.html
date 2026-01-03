@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('Books', ~{::section})}">
+<section>
+
+  <header>
+      <h1 style="font-size:20px;font-weight:700;">Books</h1>
+      <nav class="actions">
+          <a class="btn btn-primary" th:href="@{/books/create}">Add book</a>
+      </nav>
+  </header>
+
+  <div class="card" th:if="${#lists.isEmpty(books)}">
+    <div class="muted">No books yet.</div>
+    <a class="btn btn-primary" th:href="@{/books/create}">Create first book</a>
+  </div>
+
+  <table th:if="${!#lists.isEmpty(books)}">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Genres</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="b : ${books}">
+      <td th:text="${b.id}">id</td>
+      <td>
+        <a th:href="@{/books/{id}(id=${b.id})}" th:text="${b.title}">title</a>
+      </td>
+      <td th:text="${b.authorFullName}">author</td>
+      <td th:text="${b.genres != null ? #strings.listJoin(b.genres, ', ') : ''}">genres</td>
+      <td>
+        <div class="actions">
+          <a class="btn" th:href="@{/books/{id}(id=${b.id})}">View</a>
+          <a class="btn" th:href="@{/books/{id}/edit(id=${b.id})}">Edit</a>
+          <form th:action="@{/books/{id}/delete(id=${b.id})}" method="post">
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</section>
+</html>
