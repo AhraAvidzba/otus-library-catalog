@@ -11,6 +11,7 @@ import lombok.Setter;
 public class GenreForm {
 
     private String id;
+
     private String name;
 
 }

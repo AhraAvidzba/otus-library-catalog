@@ -14,12 +14,15 @@ import java.util.Set;
 public class BookForm {
 
     private String id;
+
     private String title;
+
     private String authorId;
+
     private Set<String> genreIds = new LinkedHashSet<>();
 
-    public BookForm(){}
-
+    public BookForm() {
+    }
 
     public void setGenreIds(Set<String> genreIds) {
         this.genreIds = (genreIds == null) ? new LinkedHashSet<>() : genreIds;

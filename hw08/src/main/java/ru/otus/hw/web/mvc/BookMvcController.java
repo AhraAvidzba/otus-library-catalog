@@ -31,8 +31,11 @@ import java.util.stream.Collectors;
 public class BookMvcController {
 
     private final BookService bookService;
+
     private final AuthorService authorService;
+
     private final GenreService genreService;
+
     private final CommentService commentService;
 
     @GetMapping

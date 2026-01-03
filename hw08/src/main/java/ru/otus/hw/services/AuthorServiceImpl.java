@@ -12,7 +12,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class AuthorServiceImpl implements AuthorService {
+
     private final AuthorRepository authorRepository;
+
     private final BookRepository bookRepository;
 
     @Override
@@ -38,7 +40,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void deleteById(String id) {
-        if (bookRepository.existsByAuthor_Id(id)) {
+        if (bookRepository.existsByAuthorId(id)) {
             throw new IllegalStateException("Нельзя удалить автора: у него есть книги");
         }
         authorRepository.deleteById(id);
