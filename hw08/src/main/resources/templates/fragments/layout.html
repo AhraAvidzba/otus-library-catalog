@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle, content)">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="${pageTitle} ?: 'Library'">Library</title>
+    <style>
+        body {
+          font-family: system-ui, -apple-system, Segoe UI, Roboto,
+                       Ubuntu, Cantarell, Noto Sans, sans-serif;
+          max-width: 980px;
+          margin: 24px auto;
+          padding: 0 16px;
+          line-height: 1.35;
+        }
+
+        header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 16px;
+        }
+
+        a {
+          color: inherit;
+        }
+
+        table {
+          border-collapse: separate;
+          border-spacing: 0;
+          border-radius: 12px;
+          overflow: hidden;
+          width: 100%;
+        }
+
+        .col-actions {
+          width: 180px;
+        }
+
+        th,
+        td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          vertical-align: top;
+        }
+
+        th {
+          background: #f6f6f6;
+          text-align: left;
+        }
+
+        .muted {
+          color: #999;
+        }
+
+        .actions {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          border: 1px solid #111;
+          border-radius: 8px;
+          padding: 6px 10px;
+
+          background: #fff;
+          text-decoration: none;
+          color: inherit;
+
+          font: inherit;
+          line-height: 1;
+          cursor: pointer;
+        }
+
+        .btn-danger {
+          border-color: #b00020;
+        }
+
+        .btn-primary {
+          border-color: #0b57d0;
+        }
+
+        form {
+          margin: 0;
+        }
+
+        input[type="text"],
+        select {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+        }
+
+        .grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .card {
+          border: 1px solid #e6e6e6;
+          border-radius: 12px;
+          padding: 14px;
+                    background: #fff;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06),
+                      0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+
+        .row {
+          display: grid;
+          grid-template-columns: 180px 1fr;
+          gap: 12px;
+          align-items: center;
+        }
+
+        .help {
+          font-size: 12px;
+          color: #666;
+        }
+
+        @media (max-width: 720px) {
+          .row {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        /* Inline edit for comments: input + buttons in one row */
+        .comment-edit { flex-wrap: nowrap; align-items: center; }
+        .comment-edit input[type="text"] { width: auto; flex: 1; min-width: 0; }
+
+    </style>
+</head>
+<body>
+<header>
+  <div>
+    <div style="font-size:20px;font-weight:700;">Library</div>
+    <div class="muted">Spring MVC + Thymeleaf</div>
+  </div>
+  <nav class="actions">
+    <a class="btn" th:href="@{/books}">Books</a>
+      <a class="btn" th:href="@{/authors}">Authors</a>
+      <a class="btn" th:href="@{/genres}">Genres</a>
+  </nav>
+</header>
+
+<main th:replace="${content}">
+  <!-- page content -->
+</main>
+
+<footer class="muted" style="margin-top:20px;">
+  OTUS homework (classic MVC)
+</footer>
+</body>
+</html>

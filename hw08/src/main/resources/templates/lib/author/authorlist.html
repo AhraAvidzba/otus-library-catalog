@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout('authors', ~{::section})}">
+<section>
+
+  <header>
+      <h1 style="font-size:20px;font-weight:700;">Authors</h1>
+      <nav class="actions">
+          <a class="btn btn-primary" th:href="@{/authors/create}">Add author</a>
+      </nav>
+  </header>
+
+    <div class="card" th:if="${errorMessage != null}" style="border-color:#b00020;">
+        <div style="font-weight:700;color:#b00020;">Ошибка</div>
+        <div class="muted" th:text="${errorMessage}">message</div>
+    </div>
+
+  <div class="card" th:if="${#lists.isEmpty(authors)}">
+    <div class="muted">No authors yet.</div>
+    <a class="btn btn-primary" th:href="@{/authors/create}">Create first author</a>
+  </div>
+
+    <table th:if="${!#lists.isEmpty(authors)}">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+        <th class="col-actions">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="g : ${authors}">
+      <td th:text="${g.id}">id</td>
+      <td th:text="${g.fullName}">author</td>
+      <td class="col-actions">
+        <div class="actions">
+            <a class="btn" th:href="@{/authors/{id}/edit(id=${g.id})}">Edit</a>
+            <form th:action="@{/authors/{id}/delete(id=${g.id})}" method="post">
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</section>
+</html>
