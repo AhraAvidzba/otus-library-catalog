@@ -11,8 +11,8 @@ import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
+import ru.otus.hw.services.CommentService;
 import ru.otus.hw.services.GenreService;
-import ru.otus.hw.web.mvc.HomeController;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@WebMvcTest(controllers = {BookMvcController.class, HomeController.class})
+@WebMvcTest(controllers = {BookMvcController.class})
 class BookMvcControllerTest {
 
     @Autowired
@@ -45,12 +45,9 @@ class BookMvcControllerTest {
     @MockBean
     private GenreService genreService;
 
-    @Test
-    void shouldRedirectRootToBooks() throws Exception {
-        mvc.perform(get("/"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/books"));
-    }
+    @MockBean
+    private CommentService commentService;
+
 
     @Test
     void shouldRenderListPage() throws Exception {
@@ -61,7 +58,7 @@ class BookMvcControllerTest {
 
         mvc.perform(get("/books"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("books/list"))
+                .andExpect(view().name("lib/book/booklist"))
                 .andExpect(model().attributeExists("books"));
 
         verify(bookService, times(1)).findAll();
@@ -74,7 +71,7 @@ class BookMvcControllerTest {
 
         mvc.perform(get("/books/b1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("books/view"))
+                .andExpect(view().name("lib/book/bookview"))
                 .andExpect(model().attributeExists("book"));
 
         verify(bookService).findById("b1");
@@ -101,8 +98,8 @@ class BookMvcControllerTest {
 
         mvc.perform(get("/books/create"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("books/form"))
-                .andExpect(model().attributeExists("form"))
+                .andExpect(view().name("lib/book/newbookform"))
+                .andExpect(model().attributeExists("bookform"))
                 .andExpect(model().attributeExists("authors"))
                 .andExpect(model().attributeExists("genres"));
 
@@ -137,8 +134,8 @@ class BookMvcControllerTest {
 
         mvc.perform(get("/books/b1/edit"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("books/form"))
-                .andExpect(model().attributeExists("form"))
+                .andExpect(view().name("lib/book/newbookform"))
+                .andExpect(model().attributeExists("bookform"))
                 .andExpect(model().attributeExists("authors"))
                 .andExpect(model().attributeExists("genres"));
 
