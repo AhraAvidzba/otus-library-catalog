@@ -1,0 +1,22 @@
+spring:
+  #Веб приложение?
+  main:
+    web-application-type: servlet #none - без веб
+#  отключить shell?
+  shell:
+    interactive:
+      enabled: true #true - взаимодействие через shell
+    script:
+      enabled: true #true - взаимодействие через shell
+
+  data:
+    mongodb:
+      # локально (если есть запущенный mongo):
+      uri: mongodb://localhost:27017/maindb
+
+#    show-sql: true
+#
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        highlight_sql: true   # подсветка (если терминал/логгер поддерживает)

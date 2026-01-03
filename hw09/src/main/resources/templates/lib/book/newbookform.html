@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(${bookform.id} == null ? 'Create book' : 'Edit book', ~{::section})}">
+<section>
+  <h1 th:text="${bookform.id} == null ? 'Create book' : 'Edit book'">Book form</h1>
+
+  <div class="card">
+    <form th:action="${bookform.id} == null ? @{/books/create} : @{/books/{id}/edit(id=${bookform.id})}" method="post" th:object="${bookform}">
+
+      <div class="grid">
+        <div>
+          <label class="help">Title</label>
+          <input type="text" th:field="*{title}" placeholder="Book title" required/>
+        </div>
+
+        <div>
+          <label class="help">Author</label>
+          <select th:field="*{authorId}" required>
+            <option value="" disabled th:selected="${bookform.authorId} == null">Choose author...</option>
+            <option th:each="a : ${authors}" th:value="${a.id}" th:text="${a.fullName}"></option>
+          </select>
+        </div>
+
+        <div>
+          <label class="help">Genres</label>
+          <div class="card" style="border-radius:10px;">
+            <div th:if="${#lists.isEmpty(genres)}" class="muted">No genres in DB</div>
+            <div th:each="g : ${genres}" style="display:flex;gap:10px;align-items:center;margin:6px 0;">
+              <input type="checkbox" th:field="*{genreIds}" th:value="${g.id}"/>
+              <span th:text="${g.name}">genre</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" type="submit" th:text="${bookform.id} == null ? 'Create' : 'Save'">Save</button>
+          <a class="btn" th:href="@{/books}">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+</html>
