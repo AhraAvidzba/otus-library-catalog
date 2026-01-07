@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(${book.title}, ~{::section})}">
+<section>
+  <h1 th:text="${book.title}">Book</h1>
+
+  <div class="card">
+    <div class="row">
+      <div class="muted">ID</div>
+      <div th:text="${book.id}">id</div>
+    </div>
+    <div class="row">
+      <div class="muted">Author</div>
+      <div th:text="${book.authorFullName}">author</div>
+    </div>
+    <div class="row">
+      <div class="muted">Genres</div>
+      <div th:text="${book.genres != null ? #strings.listJoin(book.genres, ', ') : ''}">genres</div>
+    </div>
+
+    <div class="actions" style="margin-top:14px;">
+      <a class="btn" th:href="@{/books/{id}/edit(id=${book.id})}">Edit</a>
+      <form th:action="@{/books/{id}/delete(id=${book.id})}" method="post">
+        <button class="btn btn-danger" type="submit">Delete</button>
+      </form>
+      <a class="btn" th:href="@{/books}">Back</a>
+    </div>
+  </div>
+
+    <!--блок с комментариями описывается в отдельном файле-->
+    <div th:replace="~{fragments/comments :: commentsBlock(${book}, ${comments}, ${editCommentId})}"></div>
+</section>
+</html>

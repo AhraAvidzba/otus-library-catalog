@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(${form.id} == null ? 'Create author' : 'Edit author', ~{::section})}">
+<section>
+    <div class="card">
+        <form method="post" class="grid" th:object="${form}" th:action="${form.id} == null ? @{/authors/create} : @{/authors/{id}/edit(id=${form.id})}">
+            <div>
+                <label class="help">Name</label>
+                <input type="text" th:field="*{name}" placeholder="Author name" required/>
+            </div>
+
+            <div class="actions" style="margin-top:14px;">
+                <button class="btn btn-primary" type="submit"
+                        th:text="${form.id} == null ? 'Add' : 'Save'">Save</button>
+                <a class="btn" th:href="@{/authors}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+</html>
