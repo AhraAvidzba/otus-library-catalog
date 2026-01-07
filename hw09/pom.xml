@@ -131,7 +131,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>/Users/ahraavidzba/Desktop/java/fullstack_tsx/frontend</workingDirectory>
+                                    <workingDirectory>/Users/ahraavidzba/Desktop/java/library-catalog-frontend</workingDirectory>
                                     <executable>npm</executable>
                                     <arguments>
                                         <argument>run</argument>
@@ -164,7 +164,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>/Users/ahraavidzba/Desktop/java/fullstack_tsx/frontend</workingDirectory>
+                                    <workingDirectory>/Users/ahraavidzba/Desktop/java/library-catalog-frontend</workingDirectory>
                                     <executable>npm</executable>
                                     <arguments>
                                         <argument>ci</argument>
@@ -179,7 +179,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>/Users/ahraavidzba/Desktop/java/fullstack_tsx/frontend</workingDirectory>
+                                    <workingDirectory>/Users/ahraavidzba/Desktop/java/library-catalog-frontend</workingDirectory>
                                     <executable>npm</executable>
                                     <arguments>
                                         <argument>run</argument>
