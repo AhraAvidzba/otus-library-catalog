@@ -33,13 +33,18 @@ public class SpaErrorController implements ErrorController {
         Integer status = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
         String uri = (String) request.getAttribute("jakarta.servlet.error.request_uri");
 
-        if (status != null && status == 404 &&
-                uri != null &&
-                !uri.startsWith("/api/") &&
-                !uri.startsWith("/assets/") &&
-                !uri.contains(".")) {
-            return "forward:/index.html";
+        if (status == null || uri == null) {
+            return "error";
         }
-        return "error";
+
+        if (status != 404) {
+            return "error";
+        }
+
+        if (uri.startsWith("/api/") || uri.startsWith("/assets/") || uri.contains(".")) {
+            return "error";
+        }
+
+        return "forward:/index.html";
     }
 }
